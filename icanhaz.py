@@ -41,8 +41,9 @@ def isOpen(ip, port, protocol):
 def icanhazafunction():
     mimetype = "application/json; charset=utf-8"
     result = request.remote_addr
-    open = "true" if isOpen(result, 4001, socket.SOCK_STREAM) & isOpen(result, 4001, socket.SOCK_DGRAM) & isOpen(result, 443, socket.SOCK_STREAM) else "false"
-    return Response("{\"ip\": \"%s\", \"open\": %s}" % (result, open), mimetype=mimetype, headers={"X-Your-Ip": request.remote_addr})
+    ipfs_open = "true" if isOpen(result, 4001, socket.SOCK_STREAM) & isOpen(result, 4001, socket.SOCK_DGRAM) else "false"
+    gateway_open = "true" if isOpen(result, 443, socket.SOCK_STREAM) else "false"
+    return Response("{\"ip\": \"%s\", \"swarm\": %s, \"gateway\": %s}" % (result, ipfs_open, gateway_open), mimetype=mimetype, headers={"X-Your-Ip": request.remote_addr})
 
 if __name__ == "__main__":
     app.run()
